@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block con %}
+    <div class="container mt-5 mb-5" style="font-size: 20px; font-weight: bold; width: 80%;">
+        <h1><b>VOTE 작성</b></h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3 mt-5">
+                <label class="form-label">SUBJECT</label>
+                <input name="sub" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">MAKER</label>
+                <input type="text" class="form-control" value="{{ user }}" disabled>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">CONTENT</label>
+                <textarea name="con" class="form-control" style="height: 100px;"></textarea>
+            </div>
+
+            <div>
+                <button type="button" onclick="makebogi()" class="btn btn-dark">보기 생성</button>
+            </div>
+
+            <div class="row" id="here">
+            </div>
+
+            <div class="text-end mt-3">
+                <button class="btn btn-dark btn-lg">TOPIC생성</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function makebogi(){
+            d = document.getElementById("here");
+            n = document.createElement("div")
+            n.setAttribute('class', 'col-lg-4 mt-5');
+            n.innerHTML = '<input type="text" name="chname" class="form-control" placeholder="보기명을 입력하세요.">\
+                    <input type="file" name="chpic" class="form-control mb-3 mt-3">\
+                    <textarea class="form control" name="chcom" placeholder="보기를 설명해 주세요."></textarea>'
+            d.appendChild(n);
+        }
+    </script>
+{% endblock %}

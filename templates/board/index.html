@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block con %}
+
+    <div class="container mt-5" style="width:70%">
+        <h1><b>게시판</b></h1>
+
+        <div class="text-end">
+            <a href="{% url 'board:create' %}" class="btn btn-dark">게시글생성</a>
+        </div>
+
+
+        <table class="table mt-3 table-hover">
+            <thead style="background-color: black; color:white; font-size: 20px;">
+                <tr>
+                    <th scope="col">NO</th>
+                    <th scope="col">SUBJECT</th>
+                    <th scope="col">SUMMARY</th>
+                    <th scope="col">WRITER</th>
+                    <th scope="col">LIKEY</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if bset %}
+                    {% for i in bset %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td><a class="sub" href="{% url 'board:detail' i.id %}">{{ i.subject }}</a></td>
+                            <td>{{ i.summary }}</td>
+                            <td>{{ i.writer.username }}</td>
+                            <td>{{ i.likey.all.count }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    {% if kw %}
+                        <tr>
+                            <th colspan="5">검색결과가 없습니다 😂</th>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <th colspan="5">첫번째 게시글을 작성해주세요 😀</th>
+                        </tr>
+                    {% endif %}
+                    
+                {% endif %}
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if bset.has_previous %}
+                    <li class="page-item"><a class="page-link" href="{% url 'board:index' %}?page=1&cate={{cate}}&kw={{kw}}">처음</a></li>
+                    <li class="page-item"><a class="page-link" href="{% url 'board:index' %}?page={{ bset.previous_page_number }}&cate={{cate}}&kw={{kw}}">이전</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link">처음</a></li>
+                    <li class="page-item disabled"><a class="page-link">이전</a></li>
+                {% endif %}
+
+                {% for i in bset.paginator.page_range %}
+                    {% if i >= bset.number|add:-5 and bset.number|add:4 >= i %}
+                        <li class="page-item {% if bset.number == i %}active{% endif %}"><a class="page-link" href="{% url 'board:index' %}?page={{i}}&cate={{cate}}&kw={{kw}}">{{i}}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if bset.has_next %}
+                    <li class="page-item"><a class="page-link" href="{% url 'board:index' %}?page={{ bset.next_page_number }}&cate={{cate}}&kw={{kw}}">다음</a></li>
+                    <li class="page-item"><a class="page-link" href="{% url 'board:index' %}?page={{ bset.paginator.num_pages }}&cate={{cate}}&kw={{kw}}">마지막</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link">다음</a></li>
+                    <li class="page-item disabled"><a class="page-link">마지막</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <form>
+            <div class="row mt-3 mb-5">
+                <div class="col-lg-2">
+                    <select class="form-select" name="cate" aria-label="Default select example">
+                        <option value="sub" {% if cate == 'sub' %}selected{% endif %}>제목</option>
+                        <option value="wri" {% if cate == 'wri' %}selected{% endif %}>글쓴이</option>
+                        <option value="con" {% if cate == 'con' %}selected{% endif %}>내용</option>
+                    </select>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" value="{{kw}}" name="kw" class="form-control">
+                </div>
+                <div class="col-lg-1">
+                    <button class="btn btn-dark">검색</button>
+                </div>
+            </div>
+        </form>
+
+
+
+    </div>
+
+    
+    <style>
+        a.sub {
+            text-decoration: none;
+            color:black;
+            font-weight: bold;
+            font-size: 17px;
+        }
+        a.sub:hover {
+            color:red;
+            font-size:18px;
+        }
+    </style>
+
+
+{% endblock %}

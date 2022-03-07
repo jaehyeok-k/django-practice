@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block con %}
+    <div class="container mt-5 mb-5"  style="font-size: 20px; font-weight: bold; width: 60%;">
+        <h1><b>정보수정</b></h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3 mt-5">
+                <label class="form-label">USERNAME</label>
+                <input type="text" name="uname" value="{{user.username}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">PASSWORD</label>
+                <input type="password" name="upass" class="form-control" id="exampleInputPassword1">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">AGE</label>
+                <input type="number" name="uage" value="{{ user.age }}" class="form-control" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">COMMENT</label>
+                <textarea class="form-control" name="ucomm">{{ user.comment }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">USERPIC</label>
+                <input type="file" name="upic" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="text-end">
+                <a href="{% url 'acc:profile' %}"><button type="button" class="btn btn-dark">BACK</button></a>
+                <button class="btn btn-dark">UPDATE</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
